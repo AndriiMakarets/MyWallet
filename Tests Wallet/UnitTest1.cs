@@ -46,13 +46,13 @@ namespace Tests_Wallet
             cust1.Wallets[0].Name="myWallet";
 
             cust1.Wallets[0].AddTransaction(new Transaction(Guid.NewGuid(), 100, "home", "something",
-                new DateTimeOffset(2021, 01, 14, 15, 0, 0, new TimeSpan(2, 0, 0)), new Currency("$")));
+                new DateTimeOffset(2021, 01, 14, 15, 0, 0, new TimeSpan(2, 0, 0)), new Currency("USD")));
                 
                     
                 cust1.AddFriend(cust2, cust1.Wallets[0]);
 
             cust2.FriendWallets[0].AddTransaction((new Transaction(Guid.NewGuid(), 200, "food", "something",
-                new DateTimeOffset(2021, 01, 14, 15, 0, 0, new TimeSpan(2, 0, 0)), new Currency("$"))));
+                new DateTimeOffset(2021, 01, 14, 15, 0, 0, new TimeSpan(2, 0, 0)), new Currency("USD"))));
         }
         }
     }
