@@ -9,11 +9,12 @@ namespace MyWallet
     {
         private Guid _guid;
         private decimal _moneySum;
-        private string _category;
+        private Category _category;
         private string _description;
         private Currency _moneyCurrency;
         private DateTimeOffset _transactionTime;
-        private string _fileOfTransaction;
+        private List<string> _filesOfTransaction;
+        public Guid CreatorGuid { get; set; }
 
         //До транзакції додатково можна прикріплювати файли (зображення або текстові).
         //використати bitmap?
@@ -32,7 +33,7 @@ namespace MyWallet
             set { _moneySum = value; }
         }
 
-        public string Category
+        public Category Category
         {
             get { return _category; }
             set { _category = value; }
@@ -56,10 +57,10 @@ namespace MyWallet
             set { _transactionTime = value; }
         }
 
-        public string FileOfTransaction
+        public List<string> FilesOfTransaction
         {
-            get { return _fileOfTransaction; }
-            set { _fileOfTransaction = value; }
+            get { return _filesOfTransaction; }
+            set { _filesOfTransaction = value; }
         }
 
         public Transaction()
@@ -67,7 +68,7 @@ namespace MyWallet
             _guid = Guid.NewGuid();
         }
 
-        public Transaction(Guid guid, decimal moneySum, string category, string description, DateTimeOffset transactionTime, Currency moneyCurrency, string file)
+        public Transaction(Guid guid, decimal moneySum, Category category, string description, DateTimeOffset transactionTime, Currency moneyCurrency, string file)
         {
             _guid = guid;
             _moneySum = moneySum;
@@ -75,10 +76,11 @@ namespace MyWallet
             _description = description;
             _moneyCurrency = moneyCurrency;
             _transactionTime = transactionTime;
-            _fileOfTransaction = file;
+            _filesOfTransaction= new List<string>();
+            _filesOfTransaction.Add(file);
         }
 
-        public Transaction(Guid guid, decimal moneySum, string category, string description, DateTimeOffset transactionTime, Currency moneyCurrency)
+        public Transaction(Guid guid, decimal moneySum, Category category, string description, DateTimeOffset transactionTime, Currency moneyCurrency)
         {
             _guid = guid;
             _moneySum = moneySum;

@@ -12,7 +12,7 @@ namespace MyWallet
         private string _email;
         private List<Wallet> _wallets;
         private List<IReadOnlyWallet> _friendWallets;
-        private List<Category> _categories;
+        private List<Category> _categories = new();
 
 
         public Guid Guid
@@ -55,10 +55,11 @@ namespace MyWallet
             _friendWallets = new List<IReadOnlyWallet>();
             _categories = new List<Category>();
     }
-        public List<IReadOnlyWallet> FriendWallets { get; }
-        public List<Wallet> Wallets { get; }
 
-        public List<Category> Categories { get; }
+        public List<IReadOnlyWallet> FriendWallets => _friendWallets;
+        public List<Wallet> Wallets => _wallets;
+
+        public List<Category> Categories => _categories;
 
         public void AddWallet()
         {

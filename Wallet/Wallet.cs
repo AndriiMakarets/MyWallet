@@ -111,7 +111,10 @@ namespace MyWallet
         {
             for (int i = 0; i <10; i++)
             {
-                Console.WriteLine(_transactions[i].ToString());
+                if (_transactions[i] == null)
+                    return;
+                else
+                    Console.WriteLine(_transactions[i].ToString());
             }
         }
 
