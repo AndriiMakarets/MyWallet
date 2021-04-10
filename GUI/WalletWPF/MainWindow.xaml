@@ -11,6 +11,15 @@
         Width="800"
         >
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="100"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+        </Grid.RowDefinitions>
 
+        <!--Header-->
+        <local:Header></local:Header>
+
+        <!--Main Control-->
+        <!--<wpf:MainView Grid.Row="1"></wpf:MainView>-->
     </Grid>
 </Window>

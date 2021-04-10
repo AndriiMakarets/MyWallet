@@ -113,7 +113,7 @@
             Grid.Row="2" 
             Grid.Column="0" 
             Grid.ColumnSpan="2" 
-            Margin="0,62,0,-2" Grid.RowSpan="3"
+            Margin="0,62,0,16" Grid.RowSpan="3"
             >
             <Button 
             Background ="WhiteSmoke"
