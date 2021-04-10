@@ -10,74 +10,124 @@
     <Grid 
         Grid.Row="1" 
         VerticalAlignment="Center" 
-        HorizontalAlignment="Center">
-        
+        HorizontalAlignment="Center" Height="271">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
+
         <StackPanel 
+            Background="White" 
             Grid.ColumnSpan="2"
             >
-            
-            <TextBlock Margin="10, 10, 10, 0">   Login   </TextBlock>
-            
+
+            <TextBlock 
+                Margin="25,0,25,0"
+                FontFamily="Century Gothic"
+                FontWeight="UltraBold"
+                Foreground="Gray" 
+                FontSize="17"
+                >   Login</TextBlock>
+
             <TextBox 
                 Name="TbLogin" 
-                Width="300" 
-                Margin="10" 
+                Width="250" 
+                Height="19"
+                Margin="25,0,25,0" 
                 HorizontalAlignment="Stretch" 
                 Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
                 >
             </TextBox>
-            
+
         </StackPanel>
         <StackPanel 
+            Background="White" 
             Grid.Row="1" 
             Grid.Column="0" 
-            Grid.ColumnSpan="2" 
+            Grid.ColumnSpan="2" Margin="0,0,0,10" 
             >
-            
-            <TextBlock Margin="10, 10, 10, 0">Password</TextBlock>
-            
+
+            <TextBlock 
+                Margin="25,10,25,0"
+                FontFamily="Century Gothic"
+                FontWeight="UltraBold"
+                Foreground="Gray" 
+                FontSize="17"
+                >   Password</TextBlock>
+
             <PasswordBox 
                 Name="TbPassword" 
-                Width="300" 
-                Margin="10" 
+                Width="250"
+                Height="19"
+                Margin="10,0,10,0" 
                 HorizontalAlignment="Stretch" 
                 PasswordChanged="TbPassword_OnPasswordChanged"
                 >
             </PasswordBox>
-            
+
         </StackPanel>
-        
-        <Button 
+
+        <StackPanel 
+            Background="White" 
+            Grid.Row="1" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="2" 
+            Margin="0,75,0,5" 
+            Grid.RowSpan="2"
+            >
+            <Button 
+            Background ="WhiteSmoke"
             Name="BSignIn" 
             Grid.Column="0" 
             Margin="10,10,10,10" 
             Grid.Row="2"
-            Command="{Binding SignInCommand}" >  Sign In   </Button>
-        
-        <Button 
+            
+            Foreground="LightSeaGreen" 
+            FontWeight="UltraBold"
+            Command="{Binding SignInCommand}" >Sign In</Button>
+
+            <Button 
+            Background ="WhiteSmoke"
             Name="BClose" 
             Grid.Row="2" 
             Grid.Column="1" 
             Margin="10" 
-            Command="{Binding CloseCommand}">     Close    </Button>
-        
-        <Button 
+            
+            Foreground="OrangeRed" 
+            FontWeight="UltraBold"
+            Command="{Binding CloseCommand}">Close</Button>
+        </StackPanel>
+
+        <StackPanel 
+            Background="White" 
+            Grid.Row="2" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="2" 
+            Margin="0,62,0,-2" Grid.RowSpan="3"
+            >
+            <Button 
+            Background ="WhiteSmoke"
             Grid.Column="0" 
             Margin="10,10,10,10" 
             Grid.Row="3" 
             Grid.ColumnSpan="2"
-            Command="{Binding SignUpCommand}" > Go to Sign Up </Button>
+            
+            Foreground="Orange" 
+            FontWeight="UltraBold"
+            Command="{Binding SignUpCommand}" 
+            >Go to Sign Up</Button>
+
+        </StackPanel>
+
     </Grid>
 </UserControl>
