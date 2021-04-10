@@ -20,6 +20,6 @@
         <local:Header></local:Header>
 
         <!--Main Control-->
-        <!--<wpf:MainView Grid.Row="1"></wpf:MainView>-->
+        <local:SignInView Grid.Row="1"></local:SignInView>
     </Grid>
 </Window>

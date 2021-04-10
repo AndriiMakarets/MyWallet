@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9DC58D4D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests Wallet", "Tests Wallet\Tests Wallet.csproj", "{C7533904-D458-4E4A-8A9F-5F2435FB48E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletWPF", "GUI\WalletWPF\WalletWPF.csproj", "{E68FED5E-4081-4192-8C08-3E99F3A8662A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletWPF", "GUI\WalletWPF\WalletWPF.csproj", "{E68FED5E-4081-4192-8C08-3E99F3A8662A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
