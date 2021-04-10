@@ -7,8 +7,21 @@
              mc:Ignorable="d">
     <Border Background="LightBlue">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="Images/Wallet.png" MinHeight="90" Stretch="Uniform" Margin="5"></Image>
-            <TextBlock Text="Wallet Application" FontSize="30" VerticalAlignment="Center"></TextBlock>
+            <Image 
+                Source="Images/Wallet.png" 
+                MinHeight="90" 
+                Stretch="Uniform" 
+                Margin="5"
+                >
+            </Image>
+            <TextBlock 
+                Text="Wallet Application" 
+                FontSize="30" 
+                FontWeight="UltraBold"
+                VerticalAlignment="Center"
+                Foreground="White" 
+                >
+            </TextBlock>
         </StackPanel>
     </Border>
 </UserControl>
