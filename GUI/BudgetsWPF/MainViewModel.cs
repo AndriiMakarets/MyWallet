@@ -11,15 +11,19 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF
     public class MainViewModel : BindableBase
     {
         public BindableBase CurrentViewModel { get; set; }
+
         public MainViewModel()
         {
-            
-            var auth = new AuthenticationService(new DataContext());
-            if (auth.TryAuthenticateAsync().GetAwaiter().GetResult() is { } user)
-                CurrentViewModel = new WalletsViewModel();
-            else CurrentViewModel = new AuthViewModel(u =>
+            var ctx = new DataContext();
+            var auth = new AuthenticationService(ctx);
+            auth.TryAuthenticateAsync().ContinueWith(t =>
             {
-                CurrentViewModel = new WalletsViewModel();
+                if (t.Result is { } user)
+                    CurrentViewModel = new WalletsViewModel(new WalletService(ctx), user);
+            });
+            CurrentViewModel = new AuthViewModel(u =>
+            {
+                CurrentViewModel = new WalletsViewModel(new WalletService(ctx), u);
                 RaisePropertyChanged(nameof(CurrentViewModel));
             }, auth);
             RaisePropertyChanged(nameof(CurrentViewModel));

@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Navigation;
 using AV.ProgrammingWithCSharp.Budgets.Services;
+using Prism.Commands;
 using Prism.Mvvm;
+using WalletModel;
 
 namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
 {
-    public class WalletsViewModel : BindableBase, INavigatable<MainNavigatableTypes>
+    public class WalletsViewModel : BindableBase
     {
-        private WalletService _service;
+        private readonly WalletService _service;
+        private readonly User _user;
         private WalletDetailsViewModel _currentWallet;
         public ObservableCollection<WalletDetailsViewModel> Wallets { get; set; }
 
         public WalletDetailsViewModel CurrentWallet
         {
-            get
-            {
-                return _currentWallet;
-            }
+            get { return _currentWallet; }
             set
             {
                 _currentWallet = value;
@@ -29,27 +24,45 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
             }
         }
 
-        public WalletsViewModel()
+        public WalletsViewModel(WalletService service, User user)
         {
-            _service = new WalletService();
+            _service = service;
+            _user = user;
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
-            foreach (var wallet in _service.GetWallets())
+            _service.GetWallets(user).ContinueWith(t =>
             {
-                Wallets.Add(new WalletDetailsViewModel(wallet));
-            }
+                foreach (var wallet in t.Result)
+                {
+                    lock (Wallets)
+                    {
+                        var i = Wallets.Count;
+                        Wallets.Add(new WalletDetailsViewModel(service, user, () =>
+                        {
+                            CurrentWallet = null;
+                            Wallets.RemoveAt(i);
+                        }, wallet));
+                    }
+                }
+            });
+            AddWalletCommand = new DelegateCommand(() =>
+            {
+                lock (Wallets)
+                {
+                    var i = Wallets.Count;
+                    var wallet = new WalletDetailsViewModel(service, user, () =>
+                    {
+                        CurrentWallet = null;
+                        Wallets.RemoveAt(i);
+                    });
+                    Wallets.Add(wallet);
+                    CurrentWallet = wallet;
+                }
+            });
         }
 
+        public DelegateCommand AddWalletCommand { get; }
 
-        public MainNavigatableTypes Type 
-        {
-            get
-            {
-                return MainNavigatableTypes.Wallets;
-            }
-        }
-        public void ClearSensitiveData()
-        {
-            
-        }
+
+        public string DisplayName => _currentWallet.Name;
     }
 }

@@ -27,7 +27,7 @@
         
         <!--Menu-->
         <ListView Grid.RowSpan="2" ItemsSource="{Binding Wallets}" 
-                  DisplayMemberPath="DisplayName" SelectedItem="{Binding CurrentWallet}" Grid.ColumnSpan="2" Margin="0,0,2,0"></ListView>
+                  DisplayMemberPath="Name" SelectedItem="{Binding CurrentWallet}" Grid.ColumnSpan="2" Margin="0,0,2,0"></ListView>
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Margin="0,0,598,0" Grid.RowSpan="2"></GridSplitter>
         <!--Content-->
@@ -42,24 +42,5 @@
                 FontWeight="UltraBold"
                 Command="{Binding AddWalletCommand}"
                 >AddWallet</Button>
-        <Button Name="ChangeWallet"
-                Background="WhiteSmoke"
-                Grid.Row="2" 
-                Grid.Column="0" 
-                Margin="10"
-                Foreground="LightSeaGreen"
-                FontWeight="UltraBold"
-                Command="{Binding ChangeCommand}"
-                >ChangeWallet</Button>
-        <Button Name="DeleteWallet"
-                Background="WhiteSmoke"
-                Grid.Column="0" 
-                Margin="10,10,10,10" 
-                Foreground="LightSeaGreen"
-                FontWeight="UltraBold"
-                Command="{Binding DeleteCommand}" 
-                Grid.Row="3" 
-                Grid.ColumnSpan="2"
-                >DeleteWallet</Button>
     </Grid>
 </UserControl>

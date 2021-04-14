@@ -7,19 +7,47 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" >
+        <StackPanel Grid.Row="0" Grid.Column="0" >
             <TextBlock Margin="10, 10, 10, 0">Name</TextBlock>
             <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" 
                      Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
-        <StackPanel Grid.Row="1" >
+        <StackPanel Grid.Row="1" Grid.Column="0" >
             <TextBlock Margin="10, 10, 10, 0">Balance</TextBlock>
             <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" 
-                     Text="{Binding Balance, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                     Text="{Binding InitialBalance, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1" >
+            <TextBlock Margin="10, 10, 10, 0">Description</TextBlock>
+            <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" 
+                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" >
+            <TextBlock Margin="10, 10, 10, 0">Currency</TextBlock>
+            <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" 
+                     Text="{Binding Currency, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" >
+        <Button Name="Save" Grid.Column="0" Margin="10,10,10,10" Command="{Binding SaveCommand}" Grid.Row="5">Save</Button>
+        <Button Name="DeleteWallet"
+                Background="WhiteSmoke"
+                Grid.Column="0" 
+                Margin="10,10,10,10" 
+                Foreground="LightSeaGreen"
+                FontWeight="UltraBold"
+                Command="{Binding DeleteCommand}" 
+                Grid.Row="3" 
+                Grid.ColumnSpan="2"
+                >DeleteWallet</Button>
         </StackPanel>
     </Grid>
 </UserControl>

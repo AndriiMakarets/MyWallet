@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AV.ProgrammingWithCSharp.Budgets.Services;
+using Prism.Commands;
 using Prism.Mvvm;
 using WalletModel;
 
@@ -10,46 +12,66 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
 {
     public class WalletDetailsViewModel : BindableBase
     {
-        private Wallet _wallet;
+        public Wallet Wallet { get; }
+        private bool IsNew = false;
 
         public string Name
         {
-            get
-            {
-                return _wallet.Name;
-            }
+            get => Wallet.Name ?? "New Wallet";
             set
             {
-                _wallet.Name = value;
-                RaisePropertyChanged(nameof(DisplayName));
+                Wallet.Name = value;
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
-        public decimal Balance
+        public decimal InitialBalance
         {
-            get
-            {
-                return _wallet.Balance();
-            }
+            get => Wallet.InitialBalance;
             set
             {
-             //   _wallet.Balance() = value;
-                RaisePropertyChanged(nameof(DisplayName));
+                Wallet.InitialBalance = value;
+                RaisePropertyChanged(nameof(InitialBalance));
             }
         }
-
-        public string DisplayName
+        public string Description
         {
-            get
+            get => Wallet.Description;
+            set
             {
-                return $"{_wallet.Name} ";
-                return "";
+                Wallet.Description = value;
+                RaisePropertyChanged(nameof(Description));
             }
         }
-
-        public WalletDetailsViewModel(Wallet wallet)
+        public string Currency
         {
-            _wallet = wallet;
+            get => Wallet.Currency;
+            set
+            {
+                Wallet.Currency = value;
+                RaisePropertyChanged(nameof(Currency));
+            }
+        }
+        public DelegateCommand SaveCommand { get; }
+        public DelegateCommand DeleteCommand { get; }
+
+        public WalletDetailsViewModel(WalletService service,User user, Action onDelete, Wallet wallet = null)
+        {
+            if (wallet is null)
+                IsNew = true;                
+            Wallet = wallet ?? new Wallet();
+            SaveCommand = new DelegateCommand(() =>
+            {
+                if (IsNew)
+                    service.AddWallet(user, Wallet.Name, Wallet.Description, Wallet.Currency, Wallet.InitialBalance);
+                else service.Save();
+            });
+            DeleteCommand = new DelegateCommand(() =>
+            {
+                if (!IsNew)
+                    service.DeleteWallet(Wallet);
+                onDelete();
+            });
         }
     }
 }
