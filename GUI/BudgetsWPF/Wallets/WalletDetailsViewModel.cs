@@ -12,8 +12,9 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
 {
     public class WalletDetailsViewModel : BindableBase
     {
+        private bool IsNew;
         public Wallet Wallet { get; }
-        private bool IsNew = false;
+
 
         public string Name
         {
@@ -34,6 +35,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
                 RaisePropertyChanged(nameof(InitialBalance));
             }
         }
+
         public string Description
         {
             get => Wallet.Description;
@@ -43,6 +45,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
                 RaisePropertyChanged(nameof(Description));
             }
         }
+
         public string Currency
         {
             get => Wallet.Currency;
@@ -52,24 +55,28 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
                 RaisePropertyChanged(nameof(Currency));
             }
         }
+
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand DeleteCommand { get; }
 
-        public WalletDetailsViewModel(WalletService service,User user, Action onDelete, Wallet wallet = null)
+        public WalletDetailsViewModel(WalletService service, User user, Action onDelete, Wallet wallet = null)
         {
             if (wallet is null)
-                IsNew = true;                
+                IsNew = true;
             Wallet = wallet ?? new Wallet();
-            SaveCommand = new DelegateCommand(() =>
+            SaveCommand = new DelegateCommand(async () =>
             {
                 if (IsNew)
-                    service.AddWallet(user, Wallet.Name, Wallet.Description, Wallet.Currency, Wallet.InitialBalance);
-                else service.Save();
+                {
+                    await service.AddWallet(user, Wallet.Name, Wallet.Description, Wallet.Currency,
+                        Wallet.InitialBalance);
+                }
+                else await service.Save();
             });
-            DeleteCommand = new DelegateCommand(() =>
+            DeleteCommand = new DelegateCommand(async () =>
             {
                 if (!IsNew)
-                    service.DeleteWallet(Wallet);
+                    await service.DeleteWallet(Wallet);
                 onDelete();
             });
         }

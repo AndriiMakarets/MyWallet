@@ -38,14 +38,16 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="0" >
         <Button Name="Save" Grid.Column="0" Margin="10,10,10,10" Command="{Binding SaveCommand}" Grid.Row="5">Save</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" >
         <Button Name="DeleteWallet"
                 Background="WhiteSmoke"
-                Grid.Column="0" 
+                Grid.Column="1" 
                 Margin="10,10,10,10" 
                 Foreground="LightSeaGreen"
                 FontWeight="UltraBold"
                 Command="{Binding DeleteCommand}" 
-                Grid.Row="3" 
+                Grid.Row="5" 
                 Grid.ColumnSpan="2"
                 >DeleteWallet</Button>
         </StackPanel>
