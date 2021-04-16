@@ -16,25 +16,25 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
         public string Name
         {
             get => Item.Name ?? "New Wallet";
-            set => Setter(nameof(Name), () => Item.Name = value);
+            set => Setter(() => Item.Name = value);
         }
 
         public decimal InitialBalance
         {
             get => Item.InitialBalance;
-            set => Setter(nameof(InitialBalance), () => Item.InitialBalance = value);
+            set => Setter(() => Item.InitialBalance = value);
         }
 
         public string Description
         {
             get => Item.Description;
-            set => Setter(nameof(Description), () => Item.Description = value);
+            set => Setter(() => Item.Description = value);
         }
 
         public string Currency
         {
             get => Item.Currency;
-            set => Setter(nameof(Currency), () => Item.Currency = value);
+            set => Setter(() => Item.Currency = value);
         }
 
         private readonly WalletService _walletService;

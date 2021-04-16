@@ -71,7 +71,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common
        protected abstract Task Add();
        protected abstract Task<T> Get();
 
-       protected void Setter(string propName, Action propAction)
+       protected void Setter(Action propAction)
        {
            if(ItemState == EntityState.Pending)
                return;
