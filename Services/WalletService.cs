@@ -17,7 +17,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
 
         public Task<List<Wallet>> GetWallets(User user)
         {
-            return _context.Wallets.Where(t => t.OwnerId == user.Id).ToListAsync();
+            return _context.Wallets.Include(t => t.Transactions).Where(t => t.OwnerId == user.Id).ToListAsync();
         }
 
         public async Task<Wallet> AddWallet(User user, string name, string description, string currency, decimal initialBalance)
@@ -42,7 +42,9 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
             _context.Wallets.Remove(wallet);
             await _context.SaveChangesAsync();
         }
-
+        
         public Task Save() => _context.SaveChangesAsync();
+
+        public Task<Wallet> GetWallet(Wallet wallet) => _context.Wallets.Include(t => t.Transactions).FirstOrDefaultAsync(t => t.Id == wallet.Id);
     }
 }

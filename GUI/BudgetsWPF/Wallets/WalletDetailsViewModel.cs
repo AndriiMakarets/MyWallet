@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common;
 using AV.ProgrammingWithCSharp.Budgets.Services;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -10,75 +11,57 @@ using WalletModel;
 
 namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
 {
-    public class WalletDetailsViewModel : BindableBase
+    public class WalletDetailsViewModel : CrudElemViewModel<Wallet>
     {
-        private bool IsNew;
-        public Wallet Wallet { get; }
-
-
         public string Name
         {
-            get => Wallet.Name ?? "New Wallet";
-            set
-            {
-                Wallet.Name = value;
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => Item.Name ?? "New Wallet";
+            set => Setter(nameof(Name), () => Item.Name = value);
         }
 
         public decimal InitialBalance
         {
-            get => Wallet.InitialBalance;
-            set
-            {
-                Wallet.InitialBalance = value;
-                RaisePropertyChanged(nameof(InitialBalance));
-            }
+            get => Item.InitialBalance;
+            set => Setter(nameof(InitialBalance), () => Item.InitialBalance = value);
         }
 
         public string Description
         {
-            get => Wallet.Description;
-            set
-            {
-                Wallet.Description = value;
-                RaisePropertyChanged(nameof(Description));
-            }
+            get => Item.Description;
+            set => Setter(nameof(Description), () => Item.Description = value);
         }
 
         public string Currency
         {
-            get => Wallet.Currency;
-            set
-            {
-                Wallet.Currency = value;
-                RaisePropertyChanged(nameof(Currency));
-            }
+            get => Item.Currency;
+            set => Setter(nameof(Currency), () => Item.Currency = value);
         }
 
-        public DelegateCommand SaveCommand { get; }
-        public DelegateCommand DeleteCommand { get; }
-
-        public WalletDetailsViewModel(WalletService service, User user, Action onDelete, Wallet wallet = null)
+        private readonly WalletService _walletService;
+        private readonly User _user;
+        public WalletDetailsViewModel(WalletService walletService, User user, Action onDelete, Wallet wallet = null) : base(wallet, onDelete)
         {
-            if (wallet is null)
-                IsNew = true;
-            Wallet = wallet ?? new Wallet();
-            SaveCommand = new DelegateCommand(async () =>
-            {
-                if (IsNew)
-                {
-                    await service.AddWallet(user, Wallet.Name, Wallet.Description, Wallet.Currency,
-                        Wallet.InitialBalance);
-                }
-                else await service.Save();
-            });
-            DeleteCommand = new DelegateCommand(async () =>
-            {
-                if (!IsNew)
-                    await service.DeleteWallet(Wallet);
-                onDelete();
-            });
+            _walletService = walletService;
+            _user = user;
         }
+
+        protected override async Task Save()
+        {
+            await _walletService.Save();
+        }
+
+        protected override async Task Delete()
+        {
+            await _walletService.DeleteWallet(Item);
+            await _walletService.Save();
+        }
+
+        protected override async Task Add()
+        {
+            await _walletService.AddWallet(_user, Item.Name, Item.Description, Item.Currency, Item.InitialBalance);
+            await _walletService.Save();
+        }
+
+        protected override Task<Wallet> Get() => _walletService.GetWallet(Item);
     }
 }
