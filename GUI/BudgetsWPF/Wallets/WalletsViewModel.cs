@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions;
 using AV.ProgrammingWithCSharp.Budgets.Services;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -24,7 +26,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
             }
         }
 
-        public WalletsViewModel(WalletService service, User user)
+        public WalletsViewModel(WalletService service, TransactionService transactionService, User user, Action<TransactionsViewModel> onManageTransaction, Action<WalletsViewModel> toWalletList)
         {
             _service = service;
             _user = user;
@@ -40,7 +42,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
                         {
                             CurrentWallet = null;
                             Wallets.RemoveAt(i);
-                        }, wallet));
+                        }, onManageTransaction , transactionService,() => toWalletList(this), wallet));
                     }
                 }
             });
@@ -53,7 +55,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
                     {
                         CurrentWallet = null;
                         Wallets.RemoveAt(i);
-                    });
+                    }, onManageTransaction, transactionService, () => toWalletList(this));
                     Wallets.Add(wallet);
                     CurrentWallet = wallet;
                 }

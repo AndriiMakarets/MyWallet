@@ -14,6 +14,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common
     {
        public T Item { get; private set; }
        private EntityState _itemState;
+       public EntityState GetItemState() => ItemState;
        protected EntityState ItemState
        {
            get => _itemState;

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets.WalletDetailsView"
+﻿<UserControl x:Class="AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions.TransactionDetailsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,7 +15,6 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition />
-            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" >
             <TextBlock Margin="10, 10, 10, 0">Name</TextBlock>
@@ -23,8 +22,8 @@
                      Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" >
-            <TextBlock Margin="10, 10, 10, 0">Initial Balance</TextBlock>
-            <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" IsReadOnly="{Binding AlreadyInDb}"
+            <TextBlock Margin="10, 10, 10, 0">Balance</TextBlock>
+            <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" 
                      Text="{Binding InitialBalance, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1" >
@@ -51,18 +50,6 @@
                 Grid.Row="5" 
                 Grid.ColumnSpan="2"
                 >DeleteWallet</Button>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Grid.Column="1" >
-        <Button Name="ManageTransactions"
-                Background="WhiteSmoke"
-                Grid.Column="1" 
-                Margin="10,10,10,10" 
-                Foreground="LightSeaGreen"
-                FontWeight="UltraBold"
-                Command="{Binding ManageTransactionsCommand}" 
-                Grid.Row="5" 
-                Grid.ColumnSpan="2"
-                >ManageTransactions</Button>
         </StackPanel>
     </Grid>
 </UserControl>

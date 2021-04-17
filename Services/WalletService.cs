@@ -45,6 +45,6 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
         
         public Task Save() => _context.SaveChangesAsync();
 
-        public Task<Wallet> GetWallet(Wallet wallet) => _context.Wallets.Include(t => t.Transactions).FirstOrDefaultAsync(t => t.Id == wallet.Id);
+        public Task<Wallet> GetWallet(int walletId) => _context.Wallets.Include(t => t.Transactions).FirstOrDefaultAsync(t => t.Id == walletId);
     }
 }

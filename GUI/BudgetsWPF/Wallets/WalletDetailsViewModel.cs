@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common;
+using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions;
 using AV.ProgrammingWithCSharp.Budgets.Services;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -18,6 +19,8 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
             get => Item.Name ?? "New Wallet";
             set => Setter(() => Item.Name = value);
         }
+
+        public bool AlreadyInDb => ItemState is not EntityState.Added or EntityState.Pending;
 
         public decimal InitialBalance
         {
@@ -39,10 +42,16 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
 
         private readonly WalletService _walletService;
         private readonly User _user;
-        public WalletDetailsViewModel(WalletService walletService, User user, Action onDelete, Wallet wallet = null) : base(wallet, onDelete)
+
+        public WalletDetailsViewModel(WalletService walletService, User user, Action onDelete,
+            Action<TransactionsViewModel> onManageTransactionRequest, TransactionService transactionService, Action toWalletList,
+            Wallet wallet = null) : base(wallet, onDelete)
         {
             _walletService = walletService;
             _user = user;
+            ManageTransactionsCommand = new DelegateCommand(() =>
+                onManageTransactionRequest(new TransactionsViewModel(walletService, transactionService, _user, Item,
+                    () => RaisePropertyChanged(), toWalletList)), () => AlreadyInDb);
         }
 
         protected override async Task Save()
@@ -62,6 +71,8 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
             await _walletService.Save();
         }
 
-        protected override Task<Wallet> Get() => _walletService.GetWallet(Item);
+        protected override Task<Wallet> Get() => _walletService.GetWallet(Item.Id);
+
+        public DelegateCommand ManageTransactionsCommand { get; }
     }
 }

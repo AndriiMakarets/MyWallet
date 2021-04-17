@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using WalletModel;
 
 namespace AV.ProgrammingWithCSharp.Budgets.Services
@@ -13,11 +14,35 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
             _context = context;
         }
 
-        public async Task<Transaction> AddTransaction()
+        public async Task<Transaction> AddTransaction(Wallet from, Wallet to, decimal amount, string description)
         {
-            return null;
+            if (from.Currency != to.Currency)
+                throw new ArgumentException("Different currencies");
+            var tr = new Transaction()
+            {
+                Amount = amount,
+                Category = null,
+                Currency = to.Currency,
+                DateTime = DateTime.Now,
+                Description = description,
+                From = from,
+                ToId = to.Id
+            };
+            await _context.Transactions.AddAsync(tr);
+            await _context.SaveChangesAsync();
+            return tr;
         }
-         
+
+        public async Task DeleteTransaction(Transaction transaction)
+        {
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Transaction> GetTransaction(int trId)
+        {
+            return await _context.Transactions.FindAsync(trId);
+        }
         public Task Save() => _context.SaveChangesAsync();
     }
 }

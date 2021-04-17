@@ -27,7 +27,7 @@
                 FontWeight="UltraBold"
                 Foreground="Gray" 
                 FontSize="17"
-                >   Login</TextBlock>
+                >   Email</TextBlock>
             <TextBox Name="TbLogin" 
                 Width="250" 
                 Height="19"
