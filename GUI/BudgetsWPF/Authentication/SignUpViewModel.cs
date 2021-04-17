@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Navigation;
 using AV.ProgrammingWithCSharp.Budgets.Models.ViewModels;
 using AV.ProgrammingWithCSharp.Budgets.Services;
 using Prism.Commands;
@@ -14,13 +13,6 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
         private RegisterUser _regUser = new ();
         private Action _gotoSignIn;
         
-        public AuthNavigatableTypes Type
-        {
-            get
-            {
-                return AuthNavigatableTypes.SignUp;
-            }
-        }
 
         public string Email
         {
