@@ -33,9 +33,9 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
                     CurrentTransaction = tr;
                 }
             });
-            transactionService.GetAllRelatedTransactions(wallet).ContinueWith(t =>
+            var res = transactionService.GetAllRelatedTransactions(wallet).GetAwaiter().GetResult(); 
             {
-                foreach (var transaction in t.Result)
+                foreach (var transaction in res)
                 {
                     lock (Transactions)
                     {
@@ -49,7 +49,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
                         CurrentTransaction = tr;
                     }
                 }
-            });
+            };
             ToWalletListCommand = new DelegateCommand(toWalletList,
                 () => Transactions.All(t => t.GetItemState() != EntityState.Pending));
         }
