@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AV.ProgrammingWithCSharp.Budgets.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,11 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
 
         public async Task<User> AuthenticateAsync(AuthUser authUser)
         {
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(authUser.Email);
+            if (!match.Success)
+                throw new Exception(authUser.Email + "Email is not correct");
+
             if (String.IsNullOrWhiteSpace(authUser.Email) || String.IsNullOrWhiteSpace(authUser.Password))
                 throw new ArgumentException("Login or Password is Empty");
             var user = await _context.Users.FirstOrDefaultAsync(user =>
@@ -54,6 +60,11 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
             var dbUser = await _context.Users.FirstOrDefaultAsync(t => t.Email == regUser.Email);
             if (dbUser != null)
                 throw new Exception("User already exists");
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(regUser.Email);
+            if (!match.Success)
+                throw new Exception(regUser.Email + "Email is not correct");
+            
             if (String.IsNullOrWhiteSpace(regUser.Email) || String.IsNullOrWhiteSpace(regUser.Password) ||
                 String.IsNullOrWhiteSpace(regUser.LastName) || string.IsNullOrWhiteSpace(regUser.FirstName))
                 throw new ArgumentException("Login, Password or Last Name is Empty");

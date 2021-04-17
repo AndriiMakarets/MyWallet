@@ -21,7 +21,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
                 return _regUser.Email;
             }
             set
-            {
+            { 
                 if (_regUser.Email != value)
                 {
                     _regUser.Email = value;
