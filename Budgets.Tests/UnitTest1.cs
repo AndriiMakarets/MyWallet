@@ -13,7 +13,7 @@ namespace Budgets.Tests
         private WalletService _walletService;
         private AuthenticationService _authenticationService;
         private User _user;
-
+      
         public Tests()
         {
         }
@@ -41,6 +41,96 @@ namespace Budgets.Tests
             var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
             var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
             Assert.AreEqual(wallet.Name, savedWallet.Name);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test2()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
+            var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(wallet.Balance(), savedWallet.Balance());
+            Assert.Pass();
+        }
+
+
+        [Test]
+        public void Test3()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
+            var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(wallet.Categories, savedWallet.Categories);
+            Assert.Pass();
+        }
+
+
+        [Test]
+        public void Test4()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
+            var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(wallet.Currency, savedWallet.Currency);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test5()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
+            var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(wallet.OwnerId, savedWallet.OwnerId);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Tes6()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
+            var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(wallet.Transactions, savedWallet.Transactions);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test7()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 0).GetAwaiter().GetResult();
+            var savedWallet = _walletService.GetWallet(wallet.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(wallet.Owner, savedWallet.Owner);
+            Assert.Pass();
+        }
+
+
+        [Test]
+        public void Test8()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 110).GetAwaiter().GetResult();
+            var wallet1 = _walletService.AddWallet(_user, "name1", "descr", "$", 110).GetAwaiter().GetResult();
+            var transaction = _transactionService.AddTransaction(wallet, wallet1, 100, "a");
+            var savedTransaction = _transactionService.GetTransaction(transaction.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(transaction.Id, savedTransaction.Id);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test9()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 110).GetAwaiter().GetResult();
+            var wallet1 = _walletService.AddWallet(_user, "name1", "descr", "$", 110).GetAwaiter().GetResult();
+            var transaction = _transactionService.AddTransaction(wallet, wallet1, 100, "a");
+            var savedTransaction = _transactionService.GetTransaction(transaction.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(transaction.Id, savedTransaction.Id);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test10()
+        {
+            var wallet = _walletService.AddWallet(_user, "name", "descr", "$", 110).GetAwaiter().GetResult();
+            var wallet1 = _walletService.AddWallet(_user, "name1", "descr", "$", 110).GetAwaiter().GetResult();
+            var transaction = _transactionService.AddTransaction(wallet, wallet1, 100, "a");
+            var savedTransaction = _transactionService.GetTransaction(transaction.Id).GetAwaiter().GetResult();
+            Assert.AreEqual(transaction.Id, savedTransaction.Id);
             Assert.Pass();
         }
     }
