@@ -16,6 +16,8 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" >
             <TextBlock Margin="10, 10, 10, 0">Name</TextBlock>
@@ -63,6 +65,21 @@
                 Grid.Row="5" 
                 Grid.ColumnSpan="2"
                 >ManageTransactions</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="0" >
+            <TextBlock Margin="10, 10, 10, 0">Current Balance</TextBlock>
+            <TextBox MinWidth="300" Margin="10" HorizontalAlignment="Stretch" IsReadOnly="True"
+                     Text="{Binding CurrentBalance, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.Column="0" >
+            <TextBlock Margin="10, 10, 10, 0">Income last month</TextBlock>
+            <TextBlock MinWidth="300" Margin="10" HorizontalAlignment="Stretch"
+                     Text="{Binding Income, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.Column="1" >
+            <TextBlock Margin="10, 10, 10, 0">Outcome last month</TextBlock>
+            <TextBlock MinWidth="300" Margin="10" HorizontalAlignment="Stretch"
+                     Text="{Binding Outcome, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>

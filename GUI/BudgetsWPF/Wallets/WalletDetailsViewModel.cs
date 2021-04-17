@@ -22,6 +22,12 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
 
         public bool AlreadyInDb => ItemState is not EntityState.Added or EntityState.Pending;
 
+        public decimal CurrentBalance { get; set; }
+
+        public decimal Income { get; set; }
+
+        public decimal Outcome { get; set; }
+
         public decimal InitialBalance
         {
             get => Item.InitialBalance;
@@ -41,17 +47,36 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
         }
 
         private readonly WalletService _walletService;
+        private readonly TransactionService _transactionService;
         private readonly User _user;
 
         public WalletDetailsViewModel(WalletService walletService, User user, Action onDelete,
-            Action<TransactionsViewModel> onManageTransactionRequest, TransactionService transactionService, Action toWalletList,
+            Action<TransactionsViewModel> onManageTransactionRequest, TransactionService transactionService,
+            Action toWalletList,
             Wallet wallet = null) : base(wallet, onDelete)
         {
             _walletService = walletService;
             _user = user;
+            _transactionService = transactionService;
             ManageTransactionsCommand = new DelegateCommand(() =>
                 onManageTransactionRequest(new TransactionsViewModel(walletService, transactionService, _user, Item,
                     () => RaisePropertyChanged(), toWalletList)), () => AlreadyInDb);
+            PropertyChanged += async (sender, args) => await UpdateTransactionInfo();
+            var _ = UpdateTransactionInfo();
+        }
+
+        private async Task UpdateTransactionInfo()
+        {
+            if (ItemState is not EntityState.Pending or EntityState.Added && Item is not null)
+            {
+                var tr = await _transactionService.GetAllRelatedTransactions(Item);
+                Income = tr.Where(t => t.ToId == Item.Id && t.DateTime > DateTime.Now.AddMonths(-1)).Sum(t => t.Amount);
+                Outcome = tr.Where(t => t.From.Id == Item.Id && t.DateTime > DateTime.Now.AddMonths(-1))
+                    .Sum(t => t.Amount);
+                CurrentBalance = InitialBalance
+                                 + tr.Where(t => t.ToId == Item.Id).Sum(t => t.Amount)
+                                 - tr.Where(t => t.From.Id == Item.Id).Sum(t => t.Amount);
+            }
         }
 
         protected override async Task Save()

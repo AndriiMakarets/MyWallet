@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WalletModel;
 
 namespace AV.ProgrammingWithCSharp.Budgets.Services
 {
     public class TransactionService
     {
-        
         private readonly DataContext _context;
 
         public TransactionService(DataContext context)
@@ -39,10 +41,19 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
             await _context.SaveChangesAsync();
         }
 
+        public Task<List<Transaction>> GetAllRelatedTransactions(Wallet wallet)
+        {
+            return _context.Transactions
+                .Include(t => t.From)
+                .Where(t => t.From.Id == wallet.Id || t.ToId == wallet.Id)
+                .ToListAsync();
+        }
+
         public async Task<Transaction> GetTransaction(int trId)
         {
             return await _context.Transactions.FindAsync(trId);
         }
+
         public Task Save() => _context.SaveChangesAsync();
     }
 }

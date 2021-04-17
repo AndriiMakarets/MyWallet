@@ -15,7 +15,8 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
 
         private TransactionDetailsViewModel _currentTransaction;
 
-        public TransactionsViewModel(WalletService service, TransactionService transactionService, User user, Wallet wallet, Action notifyTransactionListChanged, Action toWalletList)
+        public TransactionsViewModel(WalletService service, TransactionService transactionService, User user,
+            Wallet wallet, Action notifyTransactionListChanged, Action toWalletList)
         {
             Transactions = new();
             AddTransactionCommand = new DelegateCommand(() =>
@@ -32,6 +33,23 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
                     CurrentTransaction = tr;
                 }
             });
+            transactionService.GetAllRelatedTransactions(wallet).ContinueWith(t =>
+            {
+                foreach (var transaction in t.Result)
+                {
+                    lock (Transactions)
+                    {
+                        var i = Transactions.Count;
+                        var tr = new TransactionDetailsViewModel(transaction, wallet, () =>
+                        {
+                            CurrentTransaction = null;
+                            Transactions.RemoveAt(i);
+                        }, transactionService, service, notifyTransactionListChanged);
+                        Transactions.Add(tr);
+                        CurrentTransaction = tr;
+                    }
+                }
+            });
             ToWalletListCommand = new DelegateCommand(toWalletList,
                 () => Transactions.All(t => t.GetItemState() == EntityState.Unchanged));
         }
@@ -45,6 +63,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
                 RaisePropertyChanged();
             }
         }
+
         public DelegateCommand AddTransactionCommand { get; }
         public DelegateCommand ToWalletListCommand { get; }
     }
