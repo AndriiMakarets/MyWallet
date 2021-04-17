@@ -51,7 +51,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
                 }
             });
             ToWalletListCommand = new DelegateCommand(toWalletList,
-                () => Transactions.All(t => t.GetItemState() == EntityState.Unchanged));
+                () => Transactions.All(t => t.GetItemState() != EntityState.Pending));
         }
 
         public TransactionDetailsViewModel CurrentTransaction

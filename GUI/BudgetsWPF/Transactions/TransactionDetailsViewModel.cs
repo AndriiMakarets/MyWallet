@@ -13,37 +13,61 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
         private readonly WalletService _walletService;
         private readonly Action _notifyTransactionChanged;
         private readonly Wallet _wallet;
-        public TransactionDetailsViewModel(Transaction? item, Wallet wallet, Action onItemDelete, TransactionService service, WalletService walletService, Action notifyTransactionChanged) : base(item, onItemDelete)
+
+        public TransactionDetailsViewModel(Transaction? item, Wallet wallet, Action onItemDelete,
+            TransactionService service, WalletService walletService, Action notifyTransactionChanged) : base(item,
+            onItemDelete)
         {
             _service = service;
             _walletService = walletService;
             _notifyTransactionChanged = notifyTransactionChanged;
             _wallet = wallet;
             ToWallets = new();
+            if (item != null && item.From != wallet)
+            {
+                CanDelete = false;
+                CanEdit = false;
+            }
+
+            if (item != null && item.ToId == wallet.Id)
+            {
+                CurrentToWallet = wallet;
+                RaisePropertyChanged();
+            }
+            else if (item != null)
+            {
+                var w = _walletService.GetWallet(item.ToId).GetAwaiter().GetResult();
+                CurrentToWallet = w;
+                RaisePropertyChanged();
+            }
+
             walletService.GetWalletsForTransaction(wallet).ContinueWith(t =>
             {
                 foreach (var wallet in t.Result)
                 {
-                   ToWallets.Add(wallet); 
+                    ToWallets.Add(wallet);
                 }
+
                 RaisePropertyChanged(nameof(ToWallets));
             });
         }
 
-        
+
         public string Description
         {
             get => Item.Description;
             set => Setter(() => Item.Description = value);
         }
+
         public decimal Amount
         {
             get => Item.Amount;
             set => Setter(() => Item.Amount = value);
         }
-        
+
         public ObservableCollection<Wallet> ToWallets { get; }
         public Wallet CurrentToWallet { get; set; }
+
         protected override async Task Save()
         {
             await _service.Save();
@@ -58,7 +82,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
 
         protected override async Task Add()
         {
-            await _service.AddTransaction(_wallet, CurrentToWallet , Item.Amount, Item.Description);
+            await _service.AddTransaction(_wallet, CurrentToWallet, Item.Amount, Item.Description);
             _notifyTransactionChanged();
         }
 

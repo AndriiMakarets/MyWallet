@@ -15,6 +15,8 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common
        public T Item { get; private set; }
        private EntityState _itemState;
        public EntityState GetItemState() => ItemState;
+       protected bool CanEdit = true;
+       protected bool CanDelete = true;
        protected EntityState ItemState
        {
            get => _itemState;
@@ -48,7 +50,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common
                    await Save();
                Item = await Get();
                ItemState = EntityState.Unchanged;
-           }, () => ItemState is EntityState.Modified or EntityState.Added);
+           }, () => ItemState is EntityState.Modified or EntityState.Added && CanEdit);
            DeleteCommand = new DelegateCommand(async () =>
            {
                if (ItemState == EntityState.Added)
@@ -59,7 +61,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common
                ItemState = EntityState.Pending;
                await Delete();
                onItemDelete();
-           }, () => ItemState is not EntityState.Pending);
+           }, () => ItemState is not EntityState.Pending && CanDelete);
            PropertyChanged += (sender, args) =>
            {
                SaveCommand.RaiseCanExecuteChanged();
