@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,13 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
         public Task<List<Wallet>> GetWallets(User user)
         {
             return _context.Wallets.Include(t => t.Transactions).Where(t => t.OwnerId == user.Id).ToListAsync();
+        }
+        public Task<List<Wallet>> GetWalletsForTransaction(Wallet wallet)
+        {
+            return _context.Wallets
+                .Include(t => t.Transactions)
+                .Where(t => t.Id != wallet.Id && t.Currency == wallet.Currency)
+                .ToListAsync();
         }
 
         public async Task<Wallet> AddWallet(User user, string name, string description, string currency, decimal initialBalance)

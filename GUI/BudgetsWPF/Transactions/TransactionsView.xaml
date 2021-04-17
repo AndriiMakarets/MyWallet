@@ -33,7 +33,7 @@
         <!--Content-->
         <ContentControl Grid.Column="2" Content="{Binding CurrentTransaction}" Grid.RowSpan="2"></ContentControl>
 
-        <Button Name="AddWallet"
+        <Button Name="AddTransaction"
                 Background="WhiteSmoke"
                 Grid.Row="1"
                 Grid.Column="0" 

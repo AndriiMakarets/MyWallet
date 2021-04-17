@@ -23,7 +23,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
                 lock (Transactions)
                 {
                     var i = Transactions.Count;
-                    var tr = new TransactionDetailsViewModel(null, () =>
+                    var tr = new TransactionDetailsViewModel(null, wallet, () =>
                     {
                         CurrentTransaction = null;
                         Transactions.RemoveAt(i);

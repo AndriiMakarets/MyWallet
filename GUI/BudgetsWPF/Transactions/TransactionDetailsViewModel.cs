@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Common;
 using AV.ProgrammingWithCSharp.Budgets.Services;
@@ -10,27 +11,55 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Transactions
     {
         private readonly TransactionService _service;
         private readonly WalletService _walletService;
-        public TransactionDetailsViewModel(Transaction? item, Action onItemDelete, TransactionService service, WalletService walletService, Action notifyTransactionChanged) : base(item, onItemDelete)
+        private readonly Action _notifyTransactionChanged;
+        private readonly Wallet _wallet;
+        public TransactionDetailsViewModel(Transaction? item, Wallet wallet, Action onItemDelete, TransactionService service, WalletService walletService, Action notifyTransactionChanged) : base(item, onItemDelete)
         {
             _service = service;
             _walletService = walletService;
-            PropertyChanged += (sender, args) => notifyTransactionChanged();
+            _notifyTransactionChanged = notifyTransactionChanged;
+            _wallet = wallet;
+            ToWallets = new();
+            walletService.GetWalletsForTransaction(wallet).ContinueWith(t =>
+            {
+                foreach (var wallet in t.Result)
+                {
+                   ToWallets.Add(wallet); 
+                }
+                RaisePropertyChanged(nameof(ToWallets));
+            });
         }
 
-        protected override Task Save()
+        
+        public string Description
         {
-            return _service.Save();
+            get => Item.Description;
+            set => Setter(() => Item.Description = value);
+        }
+        public decimal Amount
+        {
+            get => Item.Amount;
+            set => Setter(() => Item.Amount = value);
+        }
+        
+        public ObservableCollection<Wallet> ToWallets { get; }
+        public Wallet CurrentToWallet { get; set; }
+        protected override async Task Save()
+        {
+            await _service.Save();
+            _notifyTransactionChanged();
         }
 
-        protected override Task Delete()
+        protected override async Task Delete()
         {
-            return _service.DeleteTransaction(Item);
+            await _service.DeleteTransaction(Item);
+            _notifyTransactionChanged();
         }
 
         protected override async Task Add()
         {
-            var toWallet = await _walletService.GetWallet(Item.ToId);
-            await _service.AddTransaction(Item.From, toWallet, Item.Amount, Item.Description);
+            await _service.AddTransaction(_wallet, CurrentToWallet , Item.Amount, Item.Description);
+            _notifyTransactionChanged();
         }
 
         protected override Task<Transaction> Get()
