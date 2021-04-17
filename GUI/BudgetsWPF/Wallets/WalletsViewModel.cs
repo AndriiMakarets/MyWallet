@@ -31,21 +31,24 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
             _service = service;
             _user = user;
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
-            _service.GetWallets(user).ContinueWith(t =>
+            var r = _service.GetWallets(user).GetAwaiter().GetResult();
             {
-                foreach (var wallet in t.Result)
+                foreach (var wallet in r)
                 {
                     lock (Wallets)
                     {
                         var i = Wallets.Count;
-                        Wallets.Add(new WalletDetailsViewModel(service, user, () =>
+                        var viewModel = new WalletDetailsViewModel(service, user, () =>
                         {
                             CurrentWallet = null;
                             Wallets.RemoveAt(i);
-                        }, onManageTransaction , transactionService,() => toWalletList(this), wallet));
+                        }, onManageTransaction, transactionService, () => toWalletList(this), wallet);
+                        //Console.WriteLine($"t count is {r.Count}, i is {i}");
+                        Wallets.Add(viewModel);
                     }
                 }
-            });
+            }
+            ;
             AddWalletCommand = new DelegateCommand(() =>
             {
                 lock (Wallets)

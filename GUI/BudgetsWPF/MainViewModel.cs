@@ -30,12 +30,15 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF
                 if (t.Result is { } user)
                     CurrentViewModel = new WalletsViewModel(wallets, transactions, user,
                         model => CurrentViewModel = model, m => CurrentViewModel = m);
-            });
-            CurrentViewModel =
-                new AuthViewModel(
-                    u => CurrentViewModel = new WalletsViewModel(wallets, transactions, u,
-                        model => CurrentViewModel = model, m => CurrentViewModel = m), auth);
-            RaisePropertyChanged(nameof(CurrentViewModel));
+                else
+                {
+                    CurrentViewModel =
+                        new AuthViewModel(
+                            u => CurrentViewModel = new WalletsViewModel(wallets, transactions, u,
+                                model => CurrentViewModel = model, m => CurrentViewModel = m), auth);
+                }
+                RaisePropertyChanged(nameof(CurrentViewModel));
+            }).GetAwaiter().GetResult();
         }
     }
 }
