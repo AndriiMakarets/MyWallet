@@ -31,9 +31,9 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
             _service = service;
             _user = user;
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
-            var r = _service.GetWallets(user).GetAwaiter().GetResult();
+            _service.GetWallets(user).ContinueWith(t =>
             {
-                foreach (var wallet in r)
+                foreach (var wallet in t.Result)
                 {
                     lock (Wallets)
                     {
@@ -47,8 +47,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
                         Wallets.Add(viewModel);
                     }
                 }
-            }
-            ;
+            });
             AddWalletCommand = new DelegateCommand(() =>
             {
                 lock (Wallets)

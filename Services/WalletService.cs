@@ -40,6 +40,8 @@ namespace AV.ProgrammingWithCSharp.Budgets.Services
                 Owner = user,
                 Transactions = new(),
             };
+            var entry = _context.Entry(user);
+            Console.WriteLine(entry.State);
             await _context.AddAsync(wallet);
             await _context.SaveChangesAsync();
             return wallet;

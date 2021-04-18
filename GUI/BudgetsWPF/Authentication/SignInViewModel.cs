@@ -14,6 +14,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
         private readonly AuthUser _authUser = new ();
         private readonly Action<User> _gotoWallets;
         private bool _isEnabled = true;
+        private AuthenticationService _authenticationService;
 
 
         public bool IsEnabled
@@ -60,12 +61,13 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
         public DelegateCommand CloseCommand { get; }
         public DelegateCommand SignUpCommand { get; }
 
-        public SignInViewModel(Action gotoSignUp, Action<User> gotoWallets)
+        public SignInViewModel(Action gotoSignUp, Action<User> gotoWallets, AuthenticationService authenticationService)
         {
             SignInCommand = new DelegateCommand(SignIn, IsSignInEnabled);
             CloseCommand = new DelegateCommand(() => Environment.Exit(0));
             SignUpCommand = new DelegateCommand(gotoSignUp);
             _gotoWallets = gotoWallets;
+            _authenticationService = authenticationService;
         }
 
         private async void SignIn()
@@ -74,12 +76,11 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
                 MessageBox.Show("Email or password is empty.");
             else
             {
-                var authService = new AuthenticationService(new DataContext());
                 User user = null;
                 try
                 {
                     IsEnabled = false;
-                    user = await authService.AuthenticateAsync(_authUser);
+                    user = await _authenticationService.AuthenticateAsync(_authUser);
                 }
                 catch (Exception ex)
                 {

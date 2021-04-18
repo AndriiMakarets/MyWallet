@@ -93,7 +93,6 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Wallets
         protected override async Task Add()
         {
             await _walletService.AddWallet(_user, Item.Name, Item.Description, Item.Currency, Item.InitialBalance);
-            await _walletService.Save();
         }
 
         protected override Task<Wallet> Get() => _walletService.GetWallet(Item.Id);

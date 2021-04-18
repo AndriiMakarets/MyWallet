@@ -12,6 +12,7 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
     {
         private RegisterUser _regUser = new ();
         private Action _gotoSignIn;
+        private AuthenticationService _authenticationService;
         
 
         public string Email
@@ -85,21 +86,21 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
         public DelegateCommand CloseCommand { get; }
         public DelegateCommand SignInCommand { get; }
 
-        public SignUpViewModel(Action gotoSignIn)
+        public SignUpViewModel(Action gotoSignIn, AuthenticationService authenticationService)
         {
             SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnabled);
             CloseCommand = new DelegateCommand(() => Environment.Exit(0));
             _gotoSignIn = gotoSignIn;
+            _authenticationService = authenticationService;
             SignInCommand = new DelegateCommand(_gotoSignIn);
         }
 
         private async void SignUp()
         {
 
-            var authService = new AuthenticationService(new DataContext());
             try
             {
-                await authService.RegisterUserAsync(_regUser);
+                await _authenticationService.RegisterUserAsync(_regUser);
             }
             catch (Exception ex)
             {

@@ -22,12 +22,12 @@ namespace AV.ProgrammingWithCSharp.Budgets.GUI.WPF.Authentication
             {
                 CurrentViewModel = _signUpViewModel;
                 RaisePropertyChanged(nameof(CurrentViewModel));
-            }, _signInSuccess);
+            }, _signInSuccess, authentication);
             _signUpViewModel = new SignUpViewModel(() =>
             {
                 CurrentViewModel = _signInViewModel;
                 RaisePropertyChanged(nameof(CurrentViewModel));
-            });
+            }, authentication);
 
             CurrentViewModel = _signInViewModel;
             RaisePropertyChanged(nameof(CurrentViewModel));
